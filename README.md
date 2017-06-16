@@ -1,6 +1,9 @@
 # LLHTranslate
 A script to add multilingual support for LLHelper.
 
+### License
+You can modify or distribute part or all of the code in this repository under Apache 2.0 license.
+
 # Usage
 
 ## 1. Parse
