@@ -3,9 +3,11 @@
 import os, argparse, sys, io, re
 import itertools
 
+from dict_read import read_dict
+
 #import pdb; pdb.Pdb(skip=['django.*']).set_trace()
 
-OUTPUT_PREFIX = "parsed-"
+OUTPUT_SUFFIX = ".dict"
 
 MAX_PARSE_LEN = 3000
 MATCH_PATTERN = r"([a-zA-Z\+\-_0-9\;\:\. \u4e00-\u9fa5\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]+)"
@@ -43,15 +45,25 @@ def main(fname, parse_only=False):
       if true_matches:
         for match in true_matches:
           output.add(match)
-
   fd.close()
-  fd = io.open(OUTPUT_PREFIX + fname, 'w')
-  for item in output:
+
+  if parse_only:
+    translate_dict = read_dict(fname + OUTPUT_SUFFIX)
+    for key in output:
+      if key not in translate_dict:
+        print("Warning: {0} is not in the translation dict.".format(key))
+    print("Parsed {0} keywords.".format(len(output)))
+    sys.exit(0)
+
+  fd = io.open(fname + OUTPUT_SUFFIX, 'w')
+  sorted_output = sorted(output, key=lambda s:len(s), reverse=True)
+  for item in sorted_output:
     fd.write(item)
     fd.write('\n')
     fd.write('\n')
+  fd.write('\n')
   fd.close()
-  print("Parsed {0} keywords.".format(len(output)))
+  print("Parsed {0} keywords.".format(len(sorted_output)))
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
