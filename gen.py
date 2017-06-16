@@ -4,7 +4,7 @@ import argparse, sys, io
 
 from dict_read import read_dict
 
-DEFAULT_SUFFIX = "-translated"
+DEFAULT_SUFFIX = "-translated.html"
 
 def main(fname, nfname):
   if not nfname:
