@@ -9,7 +9,7 @@ def verify_line(line):
     return 1
   return 0
 
-def read_dict(fname):
+def read_dict(fname, show_warning=True):
   content = dict()
   try:
     fd = io.open(fname, 'r')
@@ -32,16 +32,17 @@ def read_dict(fname):
     check = verify_line(val_line)
     if check == -1:
       sys.exit("ERROR: Unexpected EOF at line {0}.".format(line_num))
-    elif check == 1:
+    elif check == 1 and show_warning:
       print("Warning: No translation found for {0} at line {1}.".format(key_line, line_num))
     line_num += 1
     val_line = val_line[:-1]
-    if key_line in content:
+    if key_line in content and show_warning:
       print("Warning: Collision for {0} at line {1}. Overriding.".format(key_line, line_num - 1))
     content[key_line] = val_line
 
   key_line = fd.readline()
-  if key_line:
+  if key_line and show_warning:
     print("Warning: EOF not found after ending literal at line {0}.".format(line_num))
 
+  fd.close()
   return content

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, argparse, sys, io, re
+import argparse, sys, io, re
 import itertools
 
 from dict_read import read_dict
